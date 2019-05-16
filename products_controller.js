@@ -1,6 +1,7 @@
 module.exports = {
     create: (req, res, next) => {
         const dbInstance = req.app.get('db'); 
+        console.log(dbInstance);
         const {name, description, price, image_url} = req.body; 
 
         dbInstance.create_product([name, description, price, image_url])
@@ -15,8 +16,8 @@ module.exports = {
         const dbInstance = req.app.get('db'); 
         const {id} = req.params; 
 
-        dbInstance.read_product(id)
-            .then( () => res.status(200).send(product) )
+        dbInstance.read_product([id])
+            .then( product => res.status(200).send(product) )
             .catch( err => {
                 res.status(500).send({errorMessage: "Yikes! You done messed up good boy!"}); 
                 console.log(err)
@@ -26,7 +27,7 @@ module.exports = {
     getAll: (req, res, next) => {
         const dbInstance = req.app.get('db'); 
 
-        dbInstance.read_product()
+        dbInstance.read_products()
             .then( products => res.status(200).send(products))
             .catch( err => {
                 res.status(500).send({errorMessage: "Yikes! You done messed up good boy!"}); 
